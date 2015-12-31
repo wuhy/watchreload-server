@@ -1,0 +1,6 @@
+.DS_Store
+node_modules
+*.bat
+.idea/
+coverage/
+.jshint.report
