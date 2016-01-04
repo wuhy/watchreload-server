@@ -28,17 +28,5 @@ module.exports = {
             console.log('file:' + event + ', on: ' + filePath);
             console.log('file Info: ' + JSON.stringify(fileTypeInfo));
         }
-    },
-
-    /**
-     * 要监控的文件sdsd
-     *
-     * @type {Array.<Object>}
-     */
-    files: {
-        include: [
-            '**/*'
-        ],
-        exclude: []
     }
 };

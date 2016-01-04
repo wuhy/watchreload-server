@@ -13,7 +13,7 @@ describe('Watch files with basePath', function () {
 
     it('should file change event fire', function (done) {
         var jsFile = 'test-edit2.js';
-        watchServer.once('fileAll', function (event, filePath) {
+        watchServer.fileWatcher.once('fileAll', function (event, filePath) {
             expect((new RegExp(jsFile + '$')).test(filePath)).to.be(true);
 
             done();

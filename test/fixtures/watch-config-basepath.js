@@ -4,9 +4,9 @@ module.exports = {
     basePath: 'test/fixtures',
     port: 12345,
 
-    
+
     watch: {
-        
+
         fileAll: function (event, filePath) {
 
         }
@@ -21,11 +21,6 @@ module.exports = {
         ]
     },
 
-    
-    files: {
-        include: [
-            'resource/**/*'
-        ],
-        exclude: []
-    }
+
+    files: ['resource/**/*']
 };

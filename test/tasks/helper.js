@@ -1,8 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 
-var WatchServer = require('../../lib/watch-server');
-var watchHandler = require('../../lib/watch-handler');
+var watchServer = require('../../index');
 
 var fixturesBaseDir = path.join(__dirname, '..', 'fixtures');
 var staticResourceBaseDir = path.join(fixturesBaseDir, 'resource');
@@ -11,20 +10,12 @@ exports.createWatchServer = function (options) {
     options || (options = {});
 
     // 创建文件监控server实例
-    var server = new WatchServer({
+    var server = watchServer.start({
         port: options.port,
         configFile: options.configFile
     });
-    server.start();
-
-    server.bindListeners(watchHandler);
-    server.bindListeners(server.options.watch);
 
     return server;
-};
-
-exports.removeComments = function (str) {
-    return str && str.replace(/(\/\*([\s\S]*?)\*\/|([^:]|^)\/\/(.*)$)/mg, '');
 };
 
 exports.editJSResourceFile = function (file, edit) {

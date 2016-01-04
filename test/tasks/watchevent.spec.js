@@ -21,21 +21,20 @@ describe('watch server event', function () {
     var jsFile = 'test-edit.js';
 
     var hasStartEvent = false;
-    watchServer.once('start', function () {
+    watchServer.webServer.once('start', function () {
         hasStartEvent = true;
     });
 
     it('must fire start event when start', function () {
-        setTimeout(function () {
-            expect(hasStartEvent).to.be(true);
-        }, 1);
+        expect(hasStartEvent).to.be(true);
     });
 
     it('JS file change must fire fileAll and send reloadPage event', function (done) {
         var doneCount = 0;
-        watchServer.once('fileAll', function (event, filePath) {
+        watchServer.fileWatcher.once('fileAll', function (event, filePath) {
+            console.log('%s: i capture: %s %s', jsFile, event, filePath)
             expect((new RegExp(jsFile + '$')).test(filePath)).to.be(true);
-            expect(event).to.eql('changed');
+            expect(event).to.eql('fileChange');
 
             (++doneCount === 2) && done();
         });
@@ -57,7 +56,6 @@ describe('watch server event', function () {
     it('CSS file change must send cssReload event to client', function (done) {
         var cssFile = 'test-edit.css';
         watchServer.once('command', function (data) {
-            console.log('edit css: ' + data);
             if ((new RegExp(cssFile + '$')).test(data.path)
                 && data.type === protocolCommand.reloadCSS
                 ) {
@@ -70,15 +68,19 @@ describe('watch server event', function () {
 
     it('must reload when config file change', function (done) {
         var configFile = watchServer.configFile;
-        var backFile = helper.backupFile(configFile);
 
-        watchServer.once('watchConfigChange', function () {
-            helper.recoverFile(backFile, configFile, true);
+        watchServer.fileWatcher.once('configChange', function () {
             done();
         });
 
+        var insertContent = '\n/* edit done */';
+        console.log(configFile)
         helper.editFileAndSave(configFile, function (data) {
-            return helper.removeComments(data.toString());
+            var content = data.toString();
+            if (content.indexOf(insertContent) !== -1) {
+                return content.replace(insertContent, '');
+            }
+            return content + insertContent;
         });
     });
 

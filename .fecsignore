@@ -4,4 +4,4 @@ test/**/*
 mock/**/*
 example/**/*
 output/**/*
-lib/client/browser-reload.min.js
+coverage/**/*
