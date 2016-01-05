@@ -26,3 +26,44 @@ describe('read files', function () {
         });
     });
 });
+
+
+describe('zip/uzip file', function () {
+    it('should zip file', function () {
+        var fs = require('fs');
+        var data = fs.readFileSync(testHelper.normalizePath('watch-config.js'));
+        var result = helper.zip(data, 'gzip');
+        expect(result.encoding).to.eql('gzip');
+        expect(result.data.length < data.length).to.be(true);
+
+        result = helper.zip(data, 'deflate');
+        expect(result.encoding).to.eql('deflate');
+        expect(result.data.length < data.length).to.be(true);
+
+        result = helper.zip(data, 'deflate gzip');
+        expect(result.encoding).to.eql('gzip');
+        expect(result.data.length < data.length).to.be(true);
+
+        result = helper.zip(data, 'unknown');
+        expect(result.encoding).to.eql(null);
+        expect(result.data.length === data.length).to.be(true);
+    });
+
+    it('should unzip file', function () {
+        var fs = require('fs');
+        var data = fs.readFileSync(testHelper.normalizePath('watch-config.js'));
+        var compressData = helper.zip(data, 'gzip').data;
+        var unzipResult = helper.unzip(compressData, 'gzip');
+        expect(unzipResult.encoding == null).to.eql(true);
+        expect(unzipResult.data.toString()).to.eql(data.toString());
+
+        compressData = helper.zip(data, 'deflate').data;
+        unzipResult = helper.unzip(compressData, 'deflate');
+        expect(unzipResult.encoding == null).to.eql(true);
+        expect(unzipResult.data.toString()).to.eql(data.toString());
+
+        unzipResult = helper.unzip(compressData, 'unknown');
+        expect(unzipResult.encoding).to.eql('unknown');
+        expect(unzipResult.data === compressData).to.be(true);
+    });
+});
