@@ -5,3 +5,4 @@ mock/**/*
 example/**/*
 output/**/*
 coverage/**/*
+dist/**/*

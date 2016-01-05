@@ -10,7 +10,9 @@
     "cover": "npm run cover-local && npm run coveralls",
     "cover-local": "istanbul cover _mocha test/tasks/*.spec.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "pre-release": "npm test"
+    "release": "sh build/release.sh",
+    "prepublish": "npm test",
+    "postinstall": "uglifyjs ./node_modules/socket.io/node_modules/socket.io-client/socket.io.js -o ./node_modules/socket.io/node_modules/socket.io-client/socket.io.min.js"
   },
   "engines": {
     "node": ">=0.10"
@@ -35,16 +37,15 @@
     "expect.js": "^0.3.1",
     "fecs": "^0.4.19",
     "istanbul": "^0.4.1",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "uglify-js": "^2.6.1"
   },
   "dependencies": {
     "chalk": "^1.1.1",
     "chokidar": "^1.4.2",
     "connect": "^3.4.0",
-    "connect-compiler": "^0.1.3",
     "connect-injector": "^0.4.2",
     "http-proxy": "^1.12.0",
-    "less": "^2.5.3",
     "lodash": "^3.10.1",
     "opn": "^3.0.3",
     "serve-static": "^1.10.0",

@@ -58,6 +58,16 @@ exports.getConfigFile = function (basePath, file) {
     return path.join(basePath || fixturesBaseDir, file || 'watchreload-config.js');
 };
 
+exports.normalizePath = function (file) {
+    if (Array.isArray(file)) {
+        var result = file.map(function (item) {
+            return path.join(fixturesBaseDir, item);
+        });
+        return result;
+    }
+    return path.join(fixturesBaseDir, file);
+};
+
 exports.backupFile = function (path) {
     var newPath = path + '.bak';
     fs.writeFileSync(newPath, fs.readFileSync(path));
