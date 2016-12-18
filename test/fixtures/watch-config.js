@@ -8,8 +8,11 @@ module.exports = {
         messageTypes: ['command', 'reloadPage']
     },
 
-
+    hmr: true,
+    
     files: [
         'test/fixtures/resource/**/*'
     ]
 };
+
+/* edit done */

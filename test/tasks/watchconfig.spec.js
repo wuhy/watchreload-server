@@ -11,7 +11,7 @@ describe('Watch files with basePath', function () {
         configFile: helper.getConfigFile('watch-config-basepath.js')
     });
 
-    it('should file change event fire', function (done) {
+    it('should fire file change event', function (done) {
         var jsFile = 'test-edit2.js';
         watchServer.fileWatcher.once('fileAll', function (event, filePath) {
             expect((new RegExp(jsFile + '$')).test(filePath)).to.be(true);

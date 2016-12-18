@@ -29,19 +29,18 @@ describe('watch server event', function () {
         expect(hasStartEvent).to.be(true);
     });
 
-    it('JS file change must fire fileAll and send reloadPage event', function (done) {
+    it('JS file change must fire fileAll and send updateModule event', function (done) {
         var doneCount = 0;
         watchServer.fileWatcher.once('fileAll', function (event, filePath) {
-            console.log('%s: i capture: %s %s', jsFile, event, filePath)
             expect((new RegExp(jsFile + '$')).test(filePath)).to.be(true);
             expect(event).to.eql('fileChange');
 
             (++doneCount === 2) && done();
         });
 
-        watchServer.once('command', function (data) {
-            if ((new RegExp(jsFile + '$')).test(data.path)
-                && data.type === protocolCommand.reloadPage
+        watchServer.once('command', function (info) {
+            if ((new RegExp(jsFile + '$')).test(info.data.path)
+                && info.type === protocolCommand.updateModule
                 ) {
 
                 if (++doneCount === 2) {
@@ -55,9 +54,9 @@ describe('watch server event', function () {
 
     it('CSS file change must send cssReload event to client', function (done) {
         var cssFile = 'test-edit.css';
-        watchServer.once('command', function (data) {
-            if ((new RegExp(cssFile + '$')).test(data.path)
-                && data.type === protocolCommand.reloadCSS
+        watchServer.once('command', function (info) {
+            if ((new RegExp(cssFile + '$')).test(info.data.path)
+                && info.type === protocolCommand.reloadCSS
                 ) {
                 done();
             }
