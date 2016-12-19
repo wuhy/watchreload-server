@@ -5,6 +5,7 @@
 
 var log = require('./lib/common/log');
 var _ = require('lodash');
+var WatchServer = require('./lib/watch-server');
 
 /**
  * 打开浏览器访问给定的URL
@@ -60,16 +61,7 @@ exports.tryOpenURL = function (options, baseURL) {
  * @return {WatchServer}
  */
 exports.start = function (options) {
-    // 初始化自定义的 logger
-    if (options && options.logger) {
-        var logger = options.logger;
-        log.log = function (level, msg) {
-            logger[level] && logger[level].call(this, msg);
-        };
-    }
-
     // 创建文件监控server实例
-    var WatchServer = require('./lib/watch-server');
     var server = new WatchServer(options);
     server.on('start', function () {
         var webServer = this.webServer;
@@ -87,3 +79,5 @@ exports.start = function (options) {
 
     return server;
 };
+
+exports.Server = WatchServer;
